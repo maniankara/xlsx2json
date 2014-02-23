@@ -1,0 +1,63 @@
+= Xlsx2json -- Converts Excel(xlsx and xlsm) worksheet into a JSON file.
+
+Xlsx2json is a Ruby gem that facilitates transformation of an Excel(xlsx and xlsm) into json without loading files into database or memory.
+
+== Installation
+
+Xlsx2json can be used from the command line or as part of a Ruby web framework. To install the gem using terminal, run the following command:
+
+    gem install xlsx2json
+
+To use it in Rails, add this line to your Gemfile:
+
+    gem "xlsx2json"
+
+
+== Basic Usage
+Xlsx2json can convert a tabular structure of an Excel worksheet into a json object. . Xlsx2json will do the conversion withoutloading the Excel file into memory or database.
+
+    require 'xlsx2json'
+    require 'json'
+
+    json_path = '/Users/developer/information.json'
+    excel_path = 'spec/fixtures/fixture_2.xlsx'
+
+    Xlsx2json::Transformer.execute excel_path, 0, json_path
+
+    JSON.parse(File.open(json_path).read) # => [{"sku"=>"P07", "bu"=>"Paper", "sales"=>"200", "year"=>"2008"}, {"sku"=>"P17", "bu"=>"Paper", "sales"=>"200", "year"=>"2014"}, {"sku"=>"P19", "bu"=>"Paper", "sales"=>"200", "year"=>"2008"}]
+
+== Excel Support
+
+* Xlsx2json only supports XLSX and XLSM files.
+* Data structure on the Excel worksheet should be tabular.
+* It is assumed that the first row of the Excel worksheet contains column names.
+* Sheet numbers start from 0.
+
+
+== Contributing
+
+Contributions are welcomed. You can fork a repository, add your code changes to the forked branch, ensure all existing unit tests pass, create new unit tests cover your new changes and finally create a pull request.
+
+After forking and then cloning the repository locally, install Bundler and then use it
+to install the development gem dependencies:
+
+    gem install bundler
+    bundle install
+
+Once this is complete, you should be able to run the test suite:
+
+    rake
+
+
+== Bug Reporting
+
+Please use the {Issues}[https://github.com/pythonicrubyist/xlsx2json/issues] page to report bugs or suggest new enhancements.
+
+
+== License
+
+Xlsx2json has been published under {MIT License}[https://github.com/pythonicrubyist/xlsx2json/blob/master/LICENSE.txt]
+
+== Dedication
+
+Dedicated to my dear {@pharmacymona}[https://twitter.com/pharmacymona] for Valentine's day, 2014.
