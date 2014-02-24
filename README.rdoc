@@ -57,7 +57,3 @@ Please use the {Issues}[https://github.com/pythonicrubyist/xlsx2json/issues] pag
 == License
 
 Xlsx2json has been published under {MIT License}[https://github.com/pythonicrubyist/xlsx2json/blob/master/LICENSE.txt]
-
-== Dedication
-
-Dedicated to my dear {@pharmacymona}[https://twitter.com/pharmacymona] for Valentine's day, 2014.
