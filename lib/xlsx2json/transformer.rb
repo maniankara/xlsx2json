@@ -3,42 +3,50 @@ require 'json'
 
 module Xlsx2json
   class Transformer
-    attr_accessor :xlsx_path,
-                  :json_path,
-                  :shhet_number
-    def initialize xlsx_path, shhet_number, json_path
-      @xlsx_path = xlsx_path
-      @json_path = json_path
-      @shhet_number = shhet_number
-      initiate_json
+
+    attr_accessor :xlsx_path, :json_path, :shhet_number, :header_row_number
+
+    def initialize xlsx_path, shhet_number, json_path, options={}
+      @xlsx_path, @json_path, @shhet_number = xlsx_path, json_path, shhet_number
+      @header_row_number = (options.has_key? :header_row_number) ? options[:header_row_number].to_i : 1
     end
 
-    def self.execute xlsx_path, shhet_number, json_path
-      sql = Transformer.new xlsx_path, shhet_number, json_path
+    def self.execute xlsx_path, shhet_number, json_path, options={header_row_number: 1}
+      sql = Transformer.new xlsx_path, shhet_number, json_path, options
       sql.run
     end
 
     def run
-      creek = Creek::Book.new @xlsx_path
-      creek.sheets[@shhet_number].rows.each_with_index do |r, i|
-        number = i + 1
-        if i.eql? 0
-          process_header r
-        else
-          process_record(r, number) unless r.empty?
-        end
-      end
+      initiate_json
+      transform_2_json
       finalize_json
       @json_path
     end
 
     private
+    def transform_2_json
+      creek = Creek::Book.new @xlsx_path
+      creek.sheets[@shhet_number].rows.each_with_index do |r, i|
+        number = i + 1
+        if number < header_row_number
+          next
+        elsif number.eql? header_row_number
+          process_header r
+        else
+          process_record(r, number) unless r.empty?
+        end
+      end
+    end
+
     def process_header header_row
       @col_to_field_maping = Hash.new
+
       header_row.invert.each do |k,v|
-        field = v.gsub('1', '') 
-        col = k.field_name_friendly
-        @col_to_field_maping[field] = col
+        unless k.nil? or v.nil?
+          field = v.gsub("#{@header_row_number}", '') 
+          col = k.field_name_friendly
+          @col_to_field_maping[field] = col
+        end
       end
     end
 
