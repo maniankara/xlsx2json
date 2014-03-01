@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Xlsx2json::VERSION
   spec.authors       = ["pythonicrubyist"]
   spec.email         = ["pythonicrubyist@gmail.com"]
-  spec.description   = %q{Converts Excel(xlsx and xlsm) worksheet into a JSON file.}
+  spec.description   = %q{Converts Excel to JSON.}
   spec.summary       = %q{Xlsx2json is a Ruby gem that facilitates transformation of an Excel(xlsx and xlsm) into json without loading files into database or memory.}
   spec.homepage      = "https://github.com/pythonicrubyist/xlsx2json"
   spec.license       = "MIT"
