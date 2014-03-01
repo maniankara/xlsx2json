@@ -1,4 +1,4 @@
-= Xlsx2json -- Converts Excel(xlsx and xlsm) worksheet into a JSON file.
+= Xlsx2json -- Converts Excel to JSON in Ruby and Ruby on Rails.
 
 Xlsx2json is a Ruby gem that facilitates transformation of an Excel(xlsx and xlsm) into json without loading files into database or memory.
 
