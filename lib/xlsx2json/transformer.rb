@@ -4,11 +4,12 @@ require 'json'
 module Xlsx2json
   class Transformer
 
-    attr_accessor :xlsx_path, :json_path, :shhet_number, :header_row_number
+    attr_accessor :xlsx_path, :json_path, :shhet_number, :header_row_number, :header_row_translations
 
     def initialize xlsx_path, shhet_number, json_path, options={}
       @xlsx_path, @json_path, @shhet_number = xlsx_path, json_path, shhet_number
       @header_row_number = (options.has_key? :header_row_number) ? options[:header_row_number].to_i : 1
+      @header_row_translations = (options.has_key? :header_row_translations) ? options[:header_row_translations] : {}
     end
 
     def self.execute xlsx_path, shhet_number, json_path, options={header_row_number: 1}
@@ -43,8 +44,11 @@ module Xlsx2json
 
       header_row.invert.each do |k,v|
         unless k.nil? or v.nil?
-          field = v.gsub("#{@header_row_number}", '') 
-          col = k.field_name_friendly
+          @header_row_translations.each do |from, to|
+            k = to if k.gsub(/\W+/, '').downcase.eql? from
+          end
+          field = v.gsub("#{@header_row_number}", '')
+          col = k.gsub(/\W+/, '').downcase
           @col_to_field_maping[field] = col
         end
       end

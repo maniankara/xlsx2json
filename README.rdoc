@@ -25,10 +25,15 @@ Xlsx2json can convert a tabular structure of an Excel worksheet into a json obje
     header_row_number = 1 # row number of the header row which contains column names. 
                           # Rows before this number get ignored. 
                           # Row numbers start from 1 based on Excel conventions.
+    header_row_translations = {"from"=>"to"} # If the header row should be changed on the fly
 
     Xlsx2json::Transformer.execute excel_path, sheet_number, json_path, header_row_number: header_row_number
 
     JSON.parse(File.open(json_path).read) # => [{"sku"=>"P07", "bu"=>"Paper", "sales"=>"200", "year"=>"2008"}, {"sku"=>"P17", "bu"=>"Paper", "sales"=>"200", "year"=>"2014"}, {"sku"=>"P19", "bu"=>"Paper", "sales"=>"200", "year"=>"2008"}]
+
+    Xlsx2json::Transformer.execute excel_path, sheet_number, json_path, :header_row_translations => {"sku" => "ski"}
+
+    JSON.parse(File.open(json_path).read) # => [{"ski"=>"P07", "bu"=>"Paper", "sales"=>"200", "year"=>"2008"}, {"ski"=>"P17", "bu"=>"Paper", "sales"=>"200", "year"=>"2014"}, {"ski"=>"P19", "bu"=>"Paper", "sales"=>"200", "year"=>"2008"}]
 
 == Excel Support
 
@@ -36,6 +41,8 @@ Xlsx2json can convert a tabular structure of an Excel worksheet into a json obje
 * Data structure on the Excel worksheet should be tabular.
 * By default is assumed that the first row of the Excel worksheet contains column names. If the header starts at a different row, you should pass that by header_row_number option. All rows before this number will get ignored.
 * Sheet numbers start from 0.
+* Use header_row_translations if there is need to obtain a different json key than the header given in the Excel worksheet. Sometimes handy not needing to modify the sheet manually.
+
 
 
 == Contributing

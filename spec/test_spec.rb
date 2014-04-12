@@ -21,4 +21,21 @@ describe 'Xlsx2json' do
     json.pop # poping the last empty hash that closed the json.
     json.should eql @expected_rows
   end
+
+  it 'Checks header row translations for an existing header' do
+    json_path = Xlsx2json::Transformer.execute 'spec/fixtures/fixture_2.xlsx', 0, 'information.json', :header_row_translations => {"sku" => "ski"}
+    json_path.should eql "information.json"
+    json = JSON.parse(File.open(json_path).read)
+    json.pop # poping the last empty hash that closed the json.
+    json.should eql @expected_rows.collect {|row| eval(row.to_s.gsub('sku', 'ski'))}
+  end
+
+  it 'Checks header row translations for a non-existing header' do
+    json_path = Xlsx2json::Transformer.execute 'spec/fixtures/fixture_2.xlsx', 0, 'information.json', :header_row_translations => {"abcd" => "ski"}
+    json_path.should eql "information.json"
+    json = JSON.parse(File.open(json_path).read)
+    json.pop # poping the last empty hash that closed the json.
+    json.should eql @expected_rows
+  end
 end
+
